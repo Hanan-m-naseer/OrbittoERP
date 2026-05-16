@@ -10,7 +10,6 @@ class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, blank=True)
-    is_active = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -25,12 +24,13 @@ class Role(TimeStampedModel):
     company = models.ForeignKey(
         Company,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True
     )
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        unique_together = ('name', 'company')
     
 class CompanyUser(TimeStampedModel):
     STATUS_CHOICES = (
